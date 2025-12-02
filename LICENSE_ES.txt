@@ -1,0 +1,67 @@
+ACUERDO DE LICENCIA DE USUARIO FINAL (EULA)
+DarkWhisper - Chat Anónimo Encriptado
+
+IMPORTANTE - LEA CUIDADOSAMENTE ANTES DE INSTALAR
+
+Este Acuerdo de Licencia de Usuario Final ("Acuerdo") es un acuerdo legal entre usted y el desarrollador de DarkWhisper ("Software").
+
+AL INSTALAR, COPIAR O UTILIZAR ESTE SOFTWARE, USTED ACEPTA ESTAR SUJETO A LOS TÉRMINOS DE ESTE ACUERDO.
+
+1. PROPÓSITO Y USO EDUCATIVO
+Este software se proporciona ÚNICAMENTE con fines de PORTAFOLIO, EDUCATIVOS y de PRUEBA. Es un proyecto de demostración que muestra encriptación, comunicación en tiempo real y diseño enfocado en privacidad.
+
+2. SIN GARANTÍA
+Este software se proporciona "TAL CUAL" sin garantía de ningún tipo, ya sea expresa o implícita, incluidas, entre otras, garantías de comerciabilidad, idoneidad para un propósito particular o no infracción.
+
+3. LIMITACIÓN DE RESPONSABILIDAD
+El desarrollador NO será responsable de ningún daño que surja del uso o la incapacidad de usar este software, incluidos, entre otros:
+- Daños directos, indirectos, incidentales o consecuentes
+- Pérdida de datos o ganancias
+- Interrupción del negocio
+- Cualquier otro daño o pérdida comercial
+
+4. RESPONSABILIDAD DEL USUARIO
+Usted reconoce y acepta que:
+- Usted es el único responsable de cualquier contenido que transmita a través de este software
+- El desarrollador NO es responsable del contenido generado por los usuarios ni de las comunicaciones
+- NO utilizará este software para actividades ilegales
+- Cumplirá con todas las leyes aplicables en su jurisdicción
+- El desarrollador no monitorea, controla ni modera las comunicaciones de los usuarios
+- Todas las comunicaciones son únicamente entre usuarios
+
+5. NATURALEZA ANÓNIMA
+Este software está diseñado para ser anónimo y efímero:
+- Los mensajes se eliminan automáticamente cada 60 segundos
+- No se recopilan datos personales
+- No se almacena historial de mensajes
+- El desarrollador NO PUEDE recuperar, acceder ni controlar ningún mensaje
+
+6. PROHIBICIÓN DE USO ILEGAL
+Usted acepta NO usar este software para:
+- Actividades ilegales de cualquier tipo
+- Acoso, amenazas o abuso
+- Distribución de contenido ilegal
+- Violar cualquier ley local, estatal, nacional o internacional
+
+7. DESCARGO DE RESPONSABILIDAD
+EL DESARROLLADOR:
+- NO respalda, apoya ni condona ninguna comunicación de usuario
+- NO es responsable de cómo los usuarios eligen usar este software
+- NO puede ser responsabilizado por las acciones o contenido de los usuarios
+- Proporciona este software únicamente como demostración técnica
+
+8. PRIVACIDAD Y DATOS
+- El desarrollador no recopila información personal
+- Toda la encriptación ocurre del lado del cliente
+- Firebase se usa solo para enrutamiento de mensajes
+- Los mensajes se eliminan automáticamente cada 60 segundos
+- No se mantienen registros, récords ni copias de seguridad
+
+9. ACEPTACIÓN
+Al hacer clic en "Acepto" o al instalar este software, usted reconoce que ha leído este acuerdo, lo comprende y acepta estar sujeto a sus términos.
+
+10. CONTACTO
+Este es un proyecto de código abierto para portafolio. Para preguntas o inquietudes, consulte el repositorio del proyecto.
+
+© 2025 DarkWhisper - Proyecto de Portafolio
+Todos los Derechos Reservados

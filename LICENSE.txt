@@ -1,0 +1,67 @@
+END USER LICENSE AGREEMENT (EULA)
+DarkWhisper - Anonymous Encrypted Chat
+
+IMPORTANT - READ CAREFULLY BEFORE INSTALLING
+
+This End User License Agreement ("Agreement") is a legal agreement between you and the developer of DarkWhisper ("Software").
+
+BY INSTALLING, COPYING, OR OTHERWISE USING THIS SOFTWARE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT.
+
+1. PURPOSE AND EDUCATIONAL USE
+This software is provided for PORTFOLIO, EDUCATIONAL, and TESTING purposes only. It is a demonstration project showcasing encryption, real-time communication, and privacy-focused design.
+
+2. NO WARRANTY
+This software is provided "AS IS" without warranty of any kind, either express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.
+
+3. LIMITATION OF LIABILITY
+The developer SHALL NOT be liable for any damages whatsoever arising out of the use of or inability to use this software, including but not limited to:
+- Direct, indirect, incidental, or consequential damages
+- Loss of data or profits
+- Business interruption
+- Any other commercial damages or losses
+
+4. USER RESPONSIBILITY
+You acknowledge and agree that:
+- You are solely responsible for any content you transmit through this software
+- The developer is NOT responsible for user-generated content or communications
+- You will NOT use this software for illegal activities
+- You will comply with all applicable laws in your jurisdiction
+- The developer does not monitor, control, or moderate user communications
+- All communications are between users only
+
+5. ANONYMOUS NATURE
+This software is designed to be anonymous and ephemeral:
+- Messages auto-delete every 60 seconds
+- No personal data is collected
+- No message history is stored
+- The developer CANNOT recover, access, or control any messages
+
+6. NO ILLEGAL USE
+You agree NOT to use this software for:
+- Illegal activities of any kind
+- Harassment, threats, or abuse
+- Distribution of illegal content
+- Violating any local, state, national, or international law
+
+7. DISCLAIMER OF RESPONSIBILITY
+THE DEVELOPER:
+- Does NOT endorse, support, or condone any user communications
+- Is NOT responsible for how users choose to use this software
+- CANNOT be held liable for user actions or content
+- Provides this software solely as a technical demonstration
+
+8. PRIVACY AND DATA
+- No personal information is collected by the developer
+- All encryption happens client-side
+- Firebase is used only for message routing
+- Messages are automatically deleted every 60 seconds
+- No logs, records, or backups are maintained
+
+9. ACCEPTANCE
+By clicking "I Agree" or by installing this software, you acknowledge that you have read this agreement, understand it, and agree to be bound by its terms.
+
+10. CONTACT
+This is an open-source portfolio project. For questions or concerns, refer to the project repository.
+
+© 2025 DarkWhisper - Portfolio Project
+All Rights Reserved

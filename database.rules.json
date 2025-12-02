@@ -1,0 +1,36 @@
+{
+  "rules": {
+    "anonymous_sessions": {
+      ".read": true,
+      "$sessionId": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['active', 'created']) && newData.child('active').isBoolean() && newData.child('created').isNumber()"
+      }
+    },
+    "messages": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["timestamp"],
+      "$messageId": {
+        ".validate": "newData.hasChildren(['text', 'nickname', 'sessionId', 'timestamp', 'encrypted'])"
+      }
+    },
+    "cleanup_timer": {
+      ".read": true,
+      ".write": true
+    },
+    "presence": {
+      ".read": true,
+      "$sessionId": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['online', 'lastSeen']) && newData.child('online').isBoolean()"
+      }
+    },
+    "typing": {
+      ".read": true,
+      "$sessionId": {
+        ".write": true
+      }
+    }
+  }
+}
