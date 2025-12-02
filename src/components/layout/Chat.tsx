@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useAuthContext, useCryptoContext, useChatContext } from '../../contexts';
 import { usePresence, useMessageCleanup, useTypingStatus, useTranslation, useMediaUpload, SUPPORTED_LANGUAGES } from '../../hooks';
 import WelcomeScreen from '../ui/WelcomeScreen';
@@ -11,7 +11,7 @@ import { db } from '../../firebase';
 const Chat = () => {
   const { user, loading: authLoading, error: authError, signInAnonymous, nickname } = useAuthContext();
   const { encryptionKey, loading: encryptionLoading } = useCryptoContext();
-  const { messages, loading: chatLoading, error: chatError, sendMessage, addReaction, activeUsers } = useChatContext();
+  const { messages, loading: chatLoading, error: chatError, sendMessage, addReaction } = useChatContext();
   const { onlineCount, loading: presenceLoading } = usePresence();
   const { uploadFile, downloadFile, uploading: uploadingFile } = useMediaUpload();
   const [mentionedUser, setMentionedUser] = useState('');
