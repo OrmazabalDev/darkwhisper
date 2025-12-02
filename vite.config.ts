@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   // Para GitHub Pages usa '/nombre-repositorio/'
   // Para Electron usa './'
-  base: process.env.GITHUB_PAGES ? '/whisperchat/' : './',
+  base: process.env.GITHUB_PAGES ? '/darkwhisper/' : './',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
