@@ -221,7 +221,7 @@ Este es un proyecto de portafolio personal. Si encuentras bugs o tienes sugerenc
 
 **OrmazabalDev**
 - GitHub: [@OrmazabalDev](https://github.com/OrmazabalDev)
-- Portfolio: [Tu sitio web]
+- Portfolio: https://ormazabaldev.github.io/devportfolio-master/
 
 ### 📧 Contacto
 
@@ -443,7 +443,7 @@ This is a personal portfolio project. If you find bugs or have suggestions:
 
 **OrmazabalDev**
 - GitHub: [@OrmazabalDev](https://github.com/OrmazabalDev)
-- Portfolio: [Your website]
+- Portfolio: https://ormazabaldev.github.io/devportfolio-master/
 
 ### 📧 Contact
 
