@@ -1,10 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useAuthContext, useCryptoContext, useChatContext } from '../../contexts';
+import { useAuthContext, useCryptoContext, useChatContext, useDMContext } from '../../contexts';
 import { usePresence, useMessageCleanup, useTypingStatus, useTranslation, useMediaUpload, SUPPORTED_LANGUAGES } from '../../hooks';
 import WelcomeScreen from '../ui/WelcomeScreen';
+import Sidebar from '../ui/Sidebar';
 import MessageList from '../chat/MessageList';
 import MessageInput from '../chat/MessageInput';
-import { Terminal, Wifi, Users, Shield, Trash2, Timer, LogOut, Volume2, VolumeX, Languages } from 'lucide-react';
+import { Terminal, Wifi, Users, Shield, Trash2, Timer, Volume2, VolumeX, Languages, Menu, X, XCircle } from 'lucide-react';
 import { ref, remove } from 'firebase/database';
 import { db } from '../../firebase';
 
@@ -12,11 +13,16 @@ const Chat = () => {
   const { user, loading: authLoading, error: authError, signInAnonymous, nickname } = useAuthContext();
   const { encryptionKey, loading: encryptionLoading } = useCryptoContext();
   const { messages, loading: chatLoading, error: chatError, sendMessage, addReaction } = useChatContext();
+  const { messages: dmMessages, activeConversation, setActiveConversation, sendDM, startConversation, endConversation, conversations } = useDMContext();
   const { onlineCount, loading: presenceLoading } = usePresence();
   const { uploadFile, downloadFile, uploading: uploadingFile } = useMediaUpload();
   const [mentionedUser, setMentionedUser] = useState('');
   const [countdown, setCountdown] = useState(120);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const saved = localStorage.getItem('sidebarCollapsed');
+    return saved ? saved === 'true' : false;
+  });
   const [autoTranslateEnabled, setAutoTranslateEnabled] = useState(() => 
     localStorage.getItem('autoTranslate') === 'true'
   );
@@ -67,15 +73,64 @@ const Chat = () => {
     setMentionedUser('');
   }, []);
 
+  const handleSendMessage = useCallback(async (text: string, file?: any) => {
+    if (!text.trim() && !file) return;
+
+    // Detectar comandos
+    if (text.startsWith('/')) {
+      const command = text.toLowerCase().trim();
+      
+      if (command.startsWith('/dm ')) {
+        const username = command.substring(4).trim();
+        if (username) {
+          await startConversation(username);
+          return;
+        }
+      }
+      
+      if (command === '/help') {
+        // Mostrar ayuda (puedes implementar un sistema de mensajes del sistema)
+        alert('Commands:\n/dm <username> - Start a private conversation\n/help - Show this help');
+        return;
+      }
+      
+      if (command === '/clear') {
+        // Implementar limpieza si es necesario
+        return;
+      }
+      
+      // Comando desconocido
+      alert(`Unknown command: ${command}\nType /help for available commands`);
+      return;
+    }
+
+    // Enviar mensaje normal o DM
+    if (activeConversation) {
+      await sendDM(activeConversation, text);
+    } else {
+      await sendMessage(text, file);
+    }
+  }, [activeConversation, sendDM, sendMessage, startConversation]);
+
+  const handleToggleSidebar = useCallback(() => {
+    setSidebarCollapsed(prev => {
+      const newValue = !prev;
+      localStorage.setItem('sidebarCollapsed', String(newValue));
+      return newValue;
+    });
+  }, []);
+
   const handleDeleteAllData = useCallback(async () => {
     if (!confirm('⚠️ This will delete your session and all local data. Continue?')) return;
 
     try {
       if (user?.uid) {
-        // Ejecutar ambas eliminaciones en paralelo
+        // Eliminar todas las referencias del usuario en Firebase
         await Promise.all([
           remove(ref(db, `anonymous_sessions/${user.uid}`)),
-          remove(ref(db, `presence/${user.uid}`))
+          remove(ref(db, `presence/${user.uid}`)),
+          remove(ref(db, `user_sessions_by_nickname/${nickname.toLowerCase()}`)),
+          remove(ref(db, `dm_conversations/${user.uid}`))
         ]);
       }
     } finally {
@@ -83,7 +138,7 @@ const Chat = () => {
       sessionStorage.clear();
       window.location.reload();
     }
-  }, [user]);
+  }, [user, nickname]);
 
   if (authLoading || encryptionLoading) {
     return (
@@ -101,41 +156,83 @@ const Chat = () => {
   }
 
   return (
-    <div className="chat-container">
-      {/* Efecto de líneas de escaneo */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="scan-line" style={{ top: 0 }} />
-        <div className="scan-line" style={{ top: '33.333%', animationDelay: '1s' }} />
-        <div className="scan-line" style={{ top: '66.666%', animationDelay: '2s' }} />
-      </div>
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', position: 'relative' }}>
+      {/* Overlay para móvil cuando el sidebar está abierto */}
+      {!sidebarCollapsed && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-10"
+          onClick={handleToggleSidebar}
+          style={{ backdropFilter: 'blur(2px)' }}
+        />
+      )}
+      
+      <Sidebar 
+        isCollapsed={sidebarCollapsed} 
+        onToggle={handleToggleSidebar}
+        currentUser={nickname}
+        onDeleteSession={handleDeleteAllData}
+        onChannelSelect={() => {}}
+      />
+      
+      <div className="chat-container" style={{ flex: 1, minWidth: 0 }}>
+        {/* Efecto de líneas de escaneo */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="scan-line" style={{ top: 0 }} />
+          <div className="scan-line" style={{ top: '33.333%', animationDelay: '1s' }} />
+          <div className="scan-line" style={{ top: '66.666%', animationDelay: '2s' }} />
+        </div>
 
-      <header className="chat-header">
+        <header className="chat-header">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
+            {sidebarCollapsed && (
+              <button
+                onClick={handleToggleSidebar}
+                className="status-badge hover:bg-accent transition-colors cursor-pointer"
+                title="Show sidebar"
+              >
+                <Menu className="w-4 h-4" style={{ color: 'var(--primary)' }} />
+              </button>
+            )}
             <div className="relative">
               <Terminal className="w-8 h-8" style={{ color: 'var(--primary)' }} />
               <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-pulse" style={{ background: 'var(--primary)' }} />
             </div>
             <div>
-              <h1 className="chat-header-title glitch-text">DarkWhisper</h1>
+              <h1 className="chat-header-title glitch-text">
+                {activeConversation ? `@${activeConversation}` : 'DarkWhisper'}
+              </h1>
               <p className="text-xs font-mono" style={{ color: 'var(--muted-foreground)' }}>
-                {'>'} Encrypted · Anonymous · Ephemeral
+                {'>'} {activeConversation ? 'Private conversation' : 'Encrypted · Anonymous · Ephemeral'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-4 text-xs md:text-sm">
+            {activeConversation && (
+              <button
+                onClick={() => endConversation(activeConversation)}
+                className="status-badge hover:bg-destructive/20 transition-colors cursor-pointer"
+                title="End private conversation"
+                style={{ borderColor: 'var(--destructive)' }}
+              >
+                <XCircle className="w-4 h-4" style={{ color: 'var(--destructive)' }} />
+                <span style={{ color: 'var(--destructive)' }}>END CHAT</span>
+              </button>
+            )}
             <div className="status-badge">
               <Wifi className="w-4 h-4 animate-pulse" style={{ color: 'var(--primary)' }} />
               <span style={{ color: 'var(--muted-foreground)' }}>CONNECTED</span>
             </div>
-            <div className="status-badge">
-              <Timer className="w-4 h-4" style={{ color: 'var(--destructive)' }} />
-              <span className="font-bold" style={{ color: 'var(--destructive)' }}>
-                {countdown}s
-              </span>
-              <span style={{ color: 'var(--muted-foreground)' }}>RESET</span>
-            </div>
+            {!activeConversation && conversations.length === 0 && (
+              <div className="status-badge">
+                <Timer className="w-4 h-4" style={{ color: 'var(--destructive)' }} />
+                <span className="font-bold" style={{ color: 'var(--destructive)' }}>
+                  {countdown}s
+                </span>
+                <span style={{ color: 'var(--muted-foreground)' }}>RESET</span>
+              </div>
+            )}
             <div className="status-badge">
               <Users className="w-4 h-4" style={{ color: 'var(--secondary)' }} />
               <span className="font-bold" style={{ color: 'var(--foreground)' }}>
@@ -260,14 +357,16 @@ const Chat = () => {
                 </div>
               </div>
             </div>
-            <button
-              onClick={handleDeleteAllData}
-              className="status-badge hover:bg-red-900/20 transition-colors cursor-pointer"
-              title="Eliminar todos mis datos y sesión"
-            >
-              <LogOut className="w-4 h-4" style={{ color: 'var(--destructive)' }} />
-              <span style={{ color: 'var(--destructive)' }}>EXIT</span>
-            </button>
+            {activeConversation && (
+              <button
+                onClick={() => setActiveConversation(null)}
+                className="status-badge hover:bg-yellow-900/20 transition-colors cursor-pointer"
+                title="Close DM"
+              >
+                <X className="w-4 h-4" style={{ color: 'var(--secondary)' }} />
+                <span style={{ color: 'var(--secondary)' }}>CLOSE DM</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -292,12 +391,12 @@ const Chat = () => {
       )}
 
       <MessageList
-        messages={messages}
+        messages={activeConversation ? dmMessages : messages}
         currentUserId={user.uid}
         loading={chatLoading}
         onMention={handleMention}
         currentUserNickname={nickname}
-        onReaction={addReaction}
+        onReaction={activeConversation ? undefined : addReaction}
         notificationVolume={notificationVolume}
         onDownloadFile={downloadFile}
         encryptionKey={encryptionKey}
@@ -329,7 +428,7 @@ const Chat = () => {
       )}
 
       <MessageInput
-        onSendMessage={sendMessage}
+        onSendMessage={handleSendMessage}
         disabled={!user || chatLoading || !encryptionKey}
         mentionedUser={mentionedUser}
         onClearMention={handleClearMention}
@@ -337,7 +436,9 @@ const Chat = () => {
         onFileSelect={uploadFile}
         uploadingFile={uploadingFile}
         onTyping={setTyping}
+        activeDM={activeConversation}
       />
+      </div>
     </div>
   );
 };

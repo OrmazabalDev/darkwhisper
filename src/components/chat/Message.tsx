@@ -165,6 +165,33 @@ const Message = memo(({ message, isOwnMessage, allMessages, currentUserNickname,
     }
   }, [onReaction, currentUserNickname, message.id]);
 
+  // Mensajes del sistema (auto-eliminables)
+  if (message.isSystemMessage) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '1rem',
+        margin: '0.5rem 0'
+      }}>
+        <div style={{
+          background: 'var(--destructive)',
+          color: 'var(--destructive-foreground)',
+          padding: '0.75rem 1.5rem',
+          borderRadius: '0.5rem',
+          fontSize: '0.875rem',
+          fontWeight: '600',
+          textAlign: 'center',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
+          animation: 'pulse 2s ease-in-out infinite'
+        }}>
+          {message.text}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <article 

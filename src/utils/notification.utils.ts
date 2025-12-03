@@ -5,8 +5,6 @@
 
 export function playNotificationSound(volume: number = 0.5) {
   try {
-    console.log('🔊 Reproduciendo sonido de notificación - Volumen:', volume);
-    
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
@@ -25,8 +23,6 @@ export function playNotificationSound(volume: number = 0.5) {
 
     oscillator.start(audioContext.currentTime);
     oscillator.stop(audioContext.currentTime + 0.2);
-    
-    console.log('✅ Sonido reproducido correctamente');
   } catch (error) {
     console.error('❌ Error reproduciendo sonido de notificación:', error);
   }

@@ -4,7 +4,14 @@
       ".read": true,
       "$sessionId": {
         ".write": true,
-        ".validate": "newData.hasChildren(['active', 'created']) && newData.child('active').isBoolean() && newData.child('created').isNumber()"
+        ".validate": "newData.hasChildren(['nickname', 'active', 'created']) && newData.child('nickname').isString() && newData.child('active').isBoolean() && newData.child('created').isNumber()"
+      }
+    },
+    "user_sessions_by_nickname": {
+      ".read": true,
+      "$nickname": {
+        ".write": true,
+        ".validate": "newData.isString() || !newData.exists()"
       }
     },
     "messages": {
@@ -30,6 +37,25 @@
       ".read": true,
       "$sessionId": {
         ".write": true
+      }
+    },
+    "dm_conversations": {
+      ".read": true,
+      "$userId": {
+        ".write": true,
+        "$username": {
+          ".validate": "newData.hasChildren(['username', 'timestamp'])"
+        }
+      }
+    },
+    "dm_messages": {
+      ".read": true,
+      "$roomId": {
+        ".write": true,
+        ".indexOn": ["timestamp"],
+        "$messageId": {
+          ".validate": "newData.hasChildren(['from', 'to', 'text', 'timestamp', 'encrypted'])"
+        }
       }
     }
   }

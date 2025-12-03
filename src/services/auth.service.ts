@@ -52,9 +52,10 @@ class AuthService {
    */
   getUserNickname(): string {
     const stored = getStorageItem('chatNickname');
-    if (stored) return stored;
+    if (stored) return stored.toLowerCase(); // Normalizar a minúsculas
     
-    const generated = generateAnonymousId();
+    const sessionId = this.getSessionId();
+    const generated = generateAnonymousId(sessionId).toLowerCase();
     setStorageItem('chatNickname', generated);
     return generated;
   }
@@ -63,7 +64,8 @@ class AuthService {
    * Set user nickname
    */
   setUserNickname(nickname: string): void {
-    const displayName = nickname?.trim() || generateAnonymousId();
+    const sessionId = this.getSessionId();
+    const displayName = (nickname?.trim() || generateAnonymousId(sessionId)).toLowerCase(); // Normalizar a minúsculas
     setStorageItem('chatNickname', displayName);
   }
 

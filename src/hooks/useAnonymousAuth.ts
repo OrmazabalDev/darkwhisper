@@ -30,17 +30,23 @@ export function useAnonymousAuth(): UseAnonymousAuthReturn {
 
   useEffect(() => {
     const existingSessionId = getStorageItem('ephemeral_session_id');
-    const existingNickname = getStorageItem('chatNickname');
+    const existingNickname = getStorageItem('chatNickname')?.toLowerCase(); // Normalizar a minúsculas
     
     if (existingSessionId && existingNickname) {
       // Restaurar sesión desde localStorage y recrear en Firebase
       const sessionRef = ref(db, `anonymous_sessions/${existingSessionId}`);
+      const nicknameIndexRef = ref(db, `user_sessions_by_nickname/${existingNickname}`);
       
-      set(sessionRef, {
-        active: true,
-        created: Date.now(),
-      }).then(() => {
+      Promise.all([
+        set(sessionRef, {
+          nickname: existingNickname,
+          active: true,
+          created: Date.now(),
+        }),
+        set(nicknameIndexRef, existingSessionId)
+      ]).then(() => {
         onDisconnect(sessionRef).remove();
+        onDisconnect(nicknameIndexRef).remove();
         setSessionId(existingSessionId);
         setIsAuthenticated(true);
         setLoading(false);
@@ -58,14 +64,21 @@ export function useAnonymousAuth(): UseAnonymousAuthReturn {
       setError(null);
       
       const newSessionId = getSessionId();
+      const nickname = (getStorageItem('chatNickname') || '').toLowerCase(); // Normalizar a minúsculas
       const sessionRef = ref(db, `anonymous_sessions/${newSessionId}`);
+      const nicknameIndexRef = ref(db, `user_sessions_by_nickname/${nickname}`);
       
-      await set(sessionRef, {
-        active: true,
-        created: Date.now(),
-      });
+      await Promise.all([
+        set(sessionRef, {
+          nickname,
+          active: true,
+          created: Date.now(),
+        }),
+        set(nicknameIndexRef, newSessionId)
+      ]);
       
       await onDisconnect(sessionRef).remove();
+      await onDisconnect(nicknameIndexRef).remove();
       
       setSessionId(newSessionId);
       setIsAuthenticated(true);

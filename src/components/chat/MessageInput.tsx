@@ -10,9 +10,10 @@ interface MessageInputProps {
   onFileSelect?: (file: File) => Promise<{ url: string; fileName: string; fileType: string; fileSize: number; storagePath: string } | null>;
   uploadingFile?: boolean;
   onTyping?: (isTyping: boolean) => void;
+  activeDM?: string | null;
 }
 
-const MessageInput = memo(({ onSendMessage, disabled = false, mentionedUser, onClearMention, onlineUsers = [], onFileSelect, uploadingFile = false, onTyping }: MessageInputProps) => {
+const MessageInput = memo(({ onSendMessage, disabled = false, mentionedUser, onClearMention, onlineUsers = [], onFileSelect, uploadingFile = false, onTyping, activeDM }: MessageInputProps) => {
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
@@ -189,7 +190,15 @@ const MessageInput = memo(({ onSendMessage, disabled = false, mentionedUser, onC
             value={message}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder={uploadingFile ? "⟳ Uploading file..." : sending ? "⟳ Encrypting and sending..." : "Type @ to mention users... 🔒 E2E encrypted"}
+            placeholder={
+              uploadingFile 
+                ? "⟳ Uploading file..." 
+                : sending 
+                ? "⟳ Encrypting and sending..." 
+                : activeDM 
+                ? `Message @${activeDM}... (or /help for commands) 🔒 E2E encrypted`
+                : "Type @ to mention users... (or /help for commands) 🔒 E2E encrypted"
+            }
             disabled={isDisabled}
             className="message-textarea"
             rows={2}

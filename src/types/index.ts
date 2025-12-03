@@ -19,6 +19,7 @@ export interface Message {
   fileType?: string;
   fileSize?: number;
   encryptedFile?: boolean;
+  isSystemMessage?: boolean;
 }
 
 export interface User {
