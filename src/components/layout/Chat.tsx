@@ -5,7 +5,7 @@ import WelcomeScreen from '../ui/WelcomeScreen';
 import Sidebar from '../ui/Sidebar';
 import MessageList from '../chat/MessageList';
 import MessageInput from '../chat/MessageInput';
-import { Terminal, Users, Timer, Volume2, VolumeX, Languages, Menu, X, XCircle } from 'lucide-react';
+import { Terminal, Users, Timer, Volume2, VolumeX, Languages, Menu, XCircle } from 'lucide-react';
 import { ref, remove } from 'firebase/database';
 import { db } from '../../firebase';
 
@@ -13,7 +13,7 @@ const Chat = () => {
   const { user, loading: authLoading, error: authError, signInAnonymous, nickname } = useAuthContext();
   const { encryptionKey, loading: encryptionLoading } = useCryptoContext();
   const { messages, loading: chatLoading, error: chatError, sendMessage, addReaction } = useChatContext();
-  const { messages: dmMessages, activeConversation, setActiveConversation, sendDM, startConversation, endConversation, conversations } = useDMContext();
+  const { messages: dmMessages, activeConversation, sendDM, startConversation, endConversation, conversations } = useDMContext();
   const { onlineCount, loading: presenceLoading } = usePresence();
   const { uploadFile, downloadFile, uploading: uploadingFile } = useMediaUpload();
   const [mentionedUser, setMentionedUser] = useState('');
